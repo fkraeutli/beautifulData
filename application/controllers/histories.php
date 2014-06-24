@@ -12,6 +12,7 @@ class Histories extends CI_Controller {
 		
 		$texts = $_POST["texts"];
 		
+		print_r( $texts );
 		
 	}
 }
