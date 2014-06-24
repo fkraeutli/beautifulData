@@ -17,3 +17,11 @@ function initHistoriesIndex() {
 	$j( "#button_add_more" ).click( prevDef ).click( addTextRow );	
 	
 }
+
+function prevDef(e) {
+	
+	e.preventDefault();
+	
+	return false;
+	
+}
