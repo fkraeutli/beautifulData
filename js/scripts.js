@@ -104,6 +104,32 @@ function visualise() {
 	
 	var output = d3.select( "#output" );
 	
+	output.selectAll("p")
+		.data( data )
+	.enter()
+		.append("p");
+		
+	output.selectAll("p").selectAll("span")
+		.data( function(d) { return d } )
+	.enter()
+		.append( "span" )
+		.classed("new", function(d) {
+		
+			if( d.row === undefined) {
+				
+				return true;
+				
+			}
+			
+			return false;
+			
+		})
+		.html( function(d) {
+		
+			return d.text + " ";
+			
+		});
+	
 		
 }
 
