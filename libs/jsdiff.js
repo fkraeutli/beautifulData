@@ -10,6 +10,7 @@
  */
 
 function escape(s) {
+
     var n = s;
     n = n.replace(/&/g, "&amp;");
     n = n.replace(/</g, "&lt;");
@@ -20,10 +21,11 @@ function escape(s) {
 }
 
 function diffString( o, n ) {
+
   o = o.replace(/\s+$/, '');
   n = n.replace(/\s+$/, '');
 
-  var out = diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
+  var out = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
   var str = "";
 
   var oSpace = o.match(/\s+/g);
@@ -72,7 +74,9 @@ function randomColor() {
                     (Math.random() * 100) + "%, " + 
                     (Math.random() * 100) + "%)";
 }
+
 function diffString2( o, n ) {
+
   o = o.replace(/\s+$/, '');
   n = n.replace(/\s+$/, '');
 
@@ -118,6 +122,7 @@ function diffString2( o, n ) {
 }
 
 function diff( o, n ) {
+
   var ns = new Object();
   var os = new Object();
   

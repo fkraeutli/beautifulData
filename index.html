@@ -11,8 +11,9 @@
 		<script type="text/javascript" src="libs/foundation/js/vendor/modernizr.js"></script>
 		<script type="text/javascript" src="libs/jquery-1.11.1.js"></script>
 		<script type="text/javascript" src="libs/d3.min.js"></script>
+		<script type="text/javascript" src="libs/jsdiff.js"></script>
 		
-		<script type="text/javascript" src="<?=$this->config->item("base_index");?>/scripts/scripts.js"></script>
+		<script type="text/javascript" src="js/scripts.js"></script>
 	
 	</head>
 	
@@ -24,7 +25,7 @@
 			
 				<h1>Text History</h1>
 		
-				<form id="form_texts" method="post" action="<?=$this->config->item("base_index");?>/histories/process">
+				<div id="form_texts">
 				
 					<div class="inputs">
 				
@@ -39,14 +40,22 @@
 					<div class="panel buttons right">
 					
 						<a href="#" class="button radius" id="button_add_more">Add more&hellip;</a>
-						<input type="submit" class="button radius alert" value="Visualise">
+						<a href="#" class="button radius alert" id="button_visualise">Visualise</a>
 						
 					</div>
 			
-				</form>
+				</div>
 			
 			</div>	
 		
+		</div>
+		
+		<div class="row">
+		
+			<div class="large-12 columns" id="output">
+					
+			</div>
+			
 		</div>
 		
 	</body>
