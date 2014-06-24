@@ -37,85 +37,74 @@ function addTextRow() {
 
 function visualise() {
 
-	function format( input, parent ) {
+	function differentiate() {
 		
-		var output = [];
-		
-		for ( var i = 0; i < input.length; i++ ) {
-
-			var d = input[i];
+		function format( input, parent ) {
 			
+			var output = [];
 			
-			if( typeof d != "object" ) {
+			for ( var i = 0; i < input.length; i++ ) {
+	
+				var d = input[i];
 				
-				d = {text: d};
+				
+				if( typeof d != "object" ) {
+					
+					d = {text: d};
+				
+				}
+				
+				d.parent = parent;
+								
+				output.push( d );
+				
+			};
 			
+			return output;
+		
+		}
+	
+		var texts = [];
+		
+		$j( ".input textarea" ).each( function() {
+			
+			texts.push( $j(this).val() );
+			
+		} );
+		
+		$j( "#output" ).html( "" );
+		
+		var data = [];
+		
+		for( var i = 1; i < texts.length; i++ ) {
+			
+			o = texts[ i - 1 ].replace( /\s+$/, '' );
+			n = texts[ i ].replace( /\s+$/, '' );
+	
+			var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
+			
+			oFormated = format( difference.o, false );
+			nFormated = format( difference.n, i -  1 );
+			
+			if( i == 1 ) {
+				
+				data.push( oFormated );
+				
 			}
 			
-			d.parent = parent;
-							
-			output.push( d );
-			
-		};
-		
-		return output;
+			data.push( nFormated );
 	
-	}
-		
-	function HTMLify( output ) {
-		
-		var str = "<p>";
-		
-		$j.each( output, function(d) {
-		
-			var span = $j("<span>");
-			
-			span.html( output[d].text );
-			
-			str += span.prop( "outerHTML" ) + " ";
-			
-		});
-		
-		str += "</p>";
-		
-		return str;
-		
-	}
-	
-	var texts = [];
-	
-	$j( ".input textarea" ).each( function() {
-		
-		texts.push( $j(this).val() );
-		
-	} );
-	
-	$j( "#output" ).html( "" );
-	
-	for( var i = 1; i < texts.length; i++ ) {
-		
-		o = texts[ i - 1 ].replace( /\s+$/, '' );
-		n = texts[ i ].replace( /\s+$/, '' );
-
-		var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
-		
-		oFormated = format( difference.o, false );
-		nFormated = format( difference.n, i -  1 );
-		
-		if( i == 1 ) {
-			
-			$j("#output").append( HTMLify( oFormated ) );
-			
 		}
 		
-		$j("#output").append( HTMLify( nFormated ) );
-		
-		console.log( oFormated );
-		console.log( nFormated );
+		return data;		
 
 	}
 	
+	var data = differentiate();
 	
+	var output = d3.select( "#output" );
+	
+		
 }
 
 /* DEBUG */
