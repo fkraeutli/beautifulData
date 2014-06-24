@@ -1,0 +1,7 @@
+.input textarea {
+  width: 100%;
+  min-height: 10em;
+}
+.right {
+  float: right;
+}
