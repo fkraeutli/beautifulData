@@ -35,72 +35,74 @@ function addTextRow() {
 	
 }
 
-function visualise() {
 
-	function differentiate() {
-		
-		function format( input, parent ) {
-			
-			var output = [];
-			
-			for ( var i = 0; i < input.length; i++ ) {
+function makeData() {
 	
-				var d = input[i];
-				
-				
-				if( typeof d != "object" ) {
-					
-					d = {text: d};
-				
-				}
-				
-				d.parent = parent;
-								
-				output.push( d );
-				
-			};
-			
-			return output;
+	function format( input, parent ) {
 		
-		}
-	
-		var texts = [];
+		var output = [];
 		
-		$j( ".input textarea" ).each( function() {
+		for ( var i = 0; i < input.length; i++ ) {
+
+			var d = input[i];
 			
-			texts.push( $j(this).val() );
 			
-		} );
-		
-		$j( "#output" ).html( "" );
-		
-		var data = [];
-		
-		for( var i = 1; i < texts.length; i++ ) {
-			
-			o = texts[ i - 1 ].replace( /\s+$/, '' );
-			n = texts[ i ].replace( /\s+$/, '' );
-	
-			var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
-			
-			oFormated = format( difference.o, false );
-			nFormated = format( difference.n, i -  1 );
-			
-			if( i == 1 ) {
+			if( typeof d != "object" ) {
 				
-				data.push( oFormated );
-				
+				d = {text: d};
+			
 			}
 			
-			data.push( nFormated );
+			d.parent = parent;
+							
+			output.push( d );
+			
+		};
+		
+		return output;
 	
+	}
+
+	var texts = [];
+	
+	$j( ".input textarea" ).each( function() {
+		
+		texts.push( $j(this).val() );
+		
+	} );
+	
+	$j( "#output" ).html( "" );
+	
+	var data = [];
+	
+	for( var i = 1; i < texts.length; i++ ) {
+		
+		o = texts[ i - 1 ].replace( /\s+$/, '' );
+		n = texts[ i ].replace( /\s+$/, '' );
+
+		var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
+		
+		oFormated = format( difference.o, false );
+		nFormated = format( difference.n, i -  1 );
+		
+		if( i == 1 ) {
+			
+			data.push( oFormated );
+			
 		}
 		
-		return data;		
+		data.push( nFormated );
 
 	}
+
 	
-	var data = differentiate();
+	return data;		
+
+}
+
+function visualise() {
+	
+	var data = makeData();
 	
 	var output = d3.select( "#output" );
 	
