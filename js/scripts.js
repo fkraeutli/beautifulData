@@ -13,7 +13,7 @@ function initHistoriesIndex() {
 		
 	}
 
-	for( var i = 1; i <= 1; i++ ) {
+	for( var i = 1; i <= 3; i++ ) {
 	
 		addTextRow();
 	
@@ -35,10 +35,9 @@ function addTextRow() {
 	
 }
 
-
 function makeData() {
 	
-	function format( input, parent ) {
+	function format( input ) {
 		
 		var output = [];
 		
@@ -52,8 +51,6 @@ function makeData() {
 				d = {text: d};
 			
 			}
-			
-			d.parent = parent;
 							
 			output.push( d );
 			
@@ -71,8 +68,6 @@ function makeData() {
 		
 	} );
 	
-	$j( "#output" ).html( "" );
-	
 	var data = [];
 	
 	for( var i = 1; i < texts.length; i++ ) {
@@ -82,8 +77,8 @@ function makeData() {
 
 		var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
 		
-		oFormated = format( difference.o, false );
-		nFormated = format( difference.n, i -  1 );
+		oFormated = format( difference.o );
+		nFormated = format( difference.n );
 		
 		if( i == 1 ) {
 			
@@ -94,10 +89,82 @@ function makeData() {
 		data.push( nFormated );
 
 	}
-
+	
 	
 	return data;		
 
+}
+
+function tabulate() {
+
+	function identify( data ) {
+		
+		var level = 0;
+
+		// identify first revision
+		for (var i = 0; i < data[0].length; i++) {
+			
+			data[0][i].id = i;
+			data[0][i].pos = i;
+			data[0][i].counter = 1;
+			
+		}
+		
+		var count = data[0].length;
+		
+		for( row = 1; row < data.length; row++ ) {
+			
+			for( col = 0; col < data[row].length; col++ ) {
+				
+				var word = data[row][col];
+				
+				// mark current position
+				word.pos = col;
+				
+				// new additions
+				if ( word.row === undefined ) {
+					
+					word.level = level;
+					word.id = count;
+					word.counter = 0;
+					
+					count++;
+					
+				}
+				
+				// kept, moved
+				if ( word.row >= 0 ) {
+					
+					var oldWord = word;
+					
+					word = data[ row - 1 ][ word.row ];
+					word.level = level;
+					word.row = oldWord.row;
+					
+/* 					data[ row - 1 ][ word.row ].removed = true; */
+					data[ row - 1 ][ word.row ] = undefined;
+				}
+				
+				word.counter = word.counter === undefined ? 1 : word.counter + 1;	
+				
+			}
+			
+			level++;
+			
+		}
+		
+		return data;
+		
+	}
+	
+	var data = makeData();
+	
+	data = identify( data );	
+	
+	console.log(data);
+	
+	DEBUG_data = data;
+	
 }
 
 function visualise() {
