@@ -226,7 +226,7 @@ function process( data, query ) {
 
 function play() {
 
-	var speed = transition_duration * 2;
+	var speed = transition_duration / 2;
 	next();
 	
 	if ( current < num_articles ) {
@@ -240,7 +240,7 @@ function play() {
 
 function play_backward() {
 
-	var speed = transition_duration * 2;
+	var speed = transition_duration / 2;
 	
 	if ( current > 0 ) {
 	
