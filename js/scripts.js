@@ -5,6 +5,12 @@ $j(initHistoriesIndex);
 
 function initHistoriesIndex() {
 
+	function addTextRow() {
+	
+		$j( "#form_texts" ).find( ".panel.input:last" ).clone().appendTo( $j("#form_texts").find( ".inputs" ) );
+		
+	}
+
 	function prevDef(e) {
 		
 		e.preventDefault();
@@ -22,20 +28,38 @@ function initHistoriesIndex() {
 	$j( "a.button" ).click( prevDef );
 
 	$j( "#button_add_more" ).click( addTextRow );	
-	$j( "#button_visualise" ).click( visualise );	
+	$j( "#button_visualise" ).click( function() {
+		
+		var data = makeData();
+		
+		console.log( trackChanges( data ) );
+		
+	} );	
 	
 	addDummyText();
 
 }
 
 
-function addTextRow() {
+function makeData( texts ) {
 	
-	$j( "#form_texts" ).find( ".panel.input:last" ).clone().appendTo( $j("#form_texts").find( ".inputs" ) );
+	if ( texts === undefined ) {
+		
+		var texts = [];
+		
+		$j( ".input textarea" ).each( function() {
+			
+			texts.push( $j(this).val() );
+			
+		} );
+		
+	}
+	
+	return processRevisions( texts );
 	
 }
 
-function makeData() {
+function processRevisions( texts ) {
 	
 	function format( input ) {
 		
@@ -44,7 +68,6 @@ function makeData() {
 		for ( var i = 0; i < input.length; i++ ) {
 
 			var d = input[i];
-			
 			
 			if( typeof d != "object" ) {
 				
@@ -59,14 +82,6 @@ function makeData() {
 		return output;
 	
 	}
-
-	var texts = [];
-	
-	$j( ".input textarea" ).each( function() {
-		
-		texts.push( $j(this).val() );
-		
-	} );
 	
 	var data = [];
 	
@@ -90,116 +105,78 @@ function makeData() {
 
 	}
 	
-	
 	return data;		
 
 }
 
-function tabulate() {
+function trackChanges( data ) {
 
-	function identify( data ) {
+	function initialise( word ) {
 		
-		var level = 0;
+		word.id = count;
+		word.currentPos = i;
+		word.count = 0;
+		
+		delete word.row;
+		 
+		count++;
+		
+	}
 
-		// identify first revision
-		for (var i = 0; i < data[0].length; i++) {
-			
-			data[0][i].id = i;
-			data[0][i].pos = i;
-			data[0][i].counter = 1;
-			
-		}
+	var count = 0;
+	
+	for ( var i = 0; i < data[0].length; i++ ) {
 		
-		var count = data[0].length;
+		var word = data[0][i];
 		
-		for( row = 1; row < data.length; row++ ) {
-			
-			for( col = 0; col < data[row].length; col++ ) {
-				
-				var word = data[row][col];
-				
-				// mark current position
-				word.pos = col;
-				
-				// new additions
-				if ( word.row === undefined ) {
-					
-					word.level = level;
-					word.id = count;
-					word.counter = 0;
-					
-					count++;
-					
-				}
-				
-				// kept, moved
-				if ( word.row >= 0 ) {
-					
-					var oldWord = word;
-					
-					word = data[ row - 1 ][ word.row ];
-					word.level = level;
-					word.row = oldWord.row;
-					
-/* 					data[ row - 1 ][ word.row ].removed = true; */
-					data[ row - 1 ][ word.row ] = undefined;
-				}
-				
-				word.counter = word.counter === undefined ? 1 : word.counter + 1;	
-				
-			}
-			
-			level++;
-			
-		}
-		
-		return data;
+		initialise(word);
 		
 	}
 	
-	var data = makeData();
-	
-	data = identify( data );	
-	
-	console.log(data);
-	
-	DEBUG_data = data;
-	
-}
-
-function visualise() {
-	
-	var data = makeData();
-	
-	var output = d3.select( "#output" );
-	
-	output.selectAll("p")
-		.data( data )
-	.enter()
-		.append("p");
+	for ( var rev = 1; rev < data.length; rev++ ) {
 		
-	output.selectAll("p").selectAll("span")
-		.data( function(d) { return d } )
-	.enter()
-		.append( "span" )
-		.classed("new", function(d) {
-		
-			if( d.row === undefined) {
+		for ( var i = 0; i < data[ rev ].length; i++ ) {
+			
+			var word = data[ rev ][ i ];
+			var prevWord = data[ rev - 1 ][ word.row ];
+			
+			if ( word.row !== undefined ) {
 				
-				return true;
+				// word has been kept or moved
+				
+				word.id = data[ rev - 1 ][ word.row ].id;
+				word.currentPos = prevWord.nextPos = i;
+				word.count = prevWord.count + 1;
+				
+			} else {
+				
+				// word has been added
+				
+				initialise( word )
 				
 			}
 			
-			return false;
-			
-		})
-		.html( function(d) {
+		}
 		
-			return d.text + " ";
-			
-		});
+	}
+		
+	return data;
+
 	
-		
+}
+
+/* UTILS */
+
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+ 
+    var copy = obj.constructor();
+ 
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    
+    return copy;
 }
 
 /* DEBUG */
