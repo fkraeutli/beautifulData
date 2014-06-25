@@ -1,0 +1,13 @@
+#search_panel {
+  text-align: center;
+}
+#output .new {
+  color: #ccc;
+}
+.input textarea {
+  width: 100%;
+  min-height: 10em;
+}
+.right {
+  float: right;
+}
