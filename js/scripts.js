@@ -13,7 +13,7 @@ function initHistoriesIndex() {
 		
 	}
 
-	for( var i = 1; i <= 1; i++ ) {
+	for( var i = 1; i <= 3; i++ ) {
 	
 		addTextRow();
 	
@@ -35,72 +35,141 @@ function addTextRow() {
 	
 }
 
-function visualise() {
+function makeData() {
+	
+	function format( input ) {
+		
+		var output = [];
+		
+		for ( var i = 0; i < input.length; i++ ) {
 
-	function differentiate() {
-		
-		function format( input, parent ) {
+			var d = input[i];
 			
-			var output = [];
 			
-			for ( var i = 0; i < input.length; i++ ) {
-	
-				var d = input[i];
+			if( typeof d != "object" ) {
 				
-				
-				if( typeof d != "object" ) {
-					
-					d = {text: d};
-				
-				}
-				
-				d.parent = parent;
-								
-				output.push( d );
-				
-			};
+				d = {text: d};
 			
-			return output;
-		
-		}
-	
-		var texts = [];
-		
-		$j( ".input textarea" ).each( function() {
-			
-			texts.push( $j(this).val() );
-			
-		} );
-		
-		$j( "#output" ).html( "" );
-		
-		var data = [];
-		
-		for( var i = 1; i < texts.length; i++ ) {
-			
-			o = texts[ i - 1 ].replace( /\s+$/, '' );
-			n = texts[ i ].replace( /\s+$/, '' );
-	
-			var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
-			
-			oFormated = format( difference.o, false );
-			nFormated = format( difference.n, i -  1 );
-			
-			if( i == 1 ) {
-				
-				data.push( oFormated );
-				
 			}
+							
+			output.push( d );
 			
-			data.push( nFormated );
+		};
+		
+		return output;
 	
+	}
+
+	var texts = [];
+	
+	$j( ".input textarea" ).each( function() {
+		
+		texts.push( $j(this).val() );
+		
+	} );
+	
+	var data = [];
+	
+	for( var i = 1; i < texts.length; i++ ) {
+		
+		o = texts[ i - 1 ].replace( /\s+$/, '' );
+		n = texts[ i ].replace( /\s+$/, '' );
+
+		var difference = diff( o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
+		
+		oFormated = format( difference.o );
+		nFormated = format( difference.n );
+		
+		if( i == 1 ) {
+			
+			data.push( oFormated );
+			
 		}
 		
-		return data;		
+		data.push( nFormated );
 
 	}
 	
-	var data = differentiate();
+	
+	return data;		
+
+}
+
+function tabulate() {
+
+	function identify( data ) {
+		
+		var level = 0;
+
+		// identify first revision
+		for (var i = 0; i < data[0].length; i++) {
+			
+			data[0][i].id = i;
+			data[0][i].pos = i;
+			data[0][i].counter = 1;
+			
+		}
+		
+		var count = data[0].length;
+		
+		for( row = 1; row < data.length; row++ ) {
+			
+			for( col = 0; col < data[row].length; col++ ) {
+				
+				var word = data[row][col];
+				
+				// mark current position
+				word.pos = col;
+				
+				// new additions
+				if ( word.row === undefined ) {
+					
+					word.level = level;
+					word.id = count;
+					word.counter = 0;
+					
+					count++;
+					
+				}
+				
+				// kept, moved
+				if ( word.row >= 0 ) {
+					
+					var oldWord = word;
+					
+					word = data[ row - 1 ][ word.row ];
+					word.level = level;
+					word.row = oldWord.row;
+					
+/* 					data[ row - 1 ][ word.row ].removed = true; */
+					data[ row - 1 ][ word.row ] = undefined;
+				}
+				
+				word.counter = word.counter === undefined ? 1 : word.counter + 1;	
+				
+			}
+			
+			level++;
+			
+		}
+		
+		return data;
+		
+	}
+	
+	var data = makeData();
+	
+	data = identify( data );	
+	
+	console.log(data);
+	
+	DEBUG_data = data;
+	
+}
+
+function visualise() {
+	
+	var data = makeData();
 	
 	var output = d3.select( "#output" );
 	
