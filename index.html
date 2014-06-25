@@ -3,62 +3,42 @@
 
 	<head>
 		
-		<title>History</title>
+		<title>Text History</title>
 		
-		<link rel="stylesheet" href="libs/foundation/css/foundation.css">
 		<link rel="stylesheet" href="css/styles.css">
 		
-		<script type="text/javascript" src="libs/foundation/js/vendor/modernizr.js"></script>
 		<script type="text/javascript" src="libs/jquery-1.11.1.js"></script>
 		<script type="text/javascript" src="libs/d3.min.js"></script>
 		<script type="text/javascript" src="libs/jsdiff.js"></script>
+		<script type="text/javascript" src="libs/txtwiki.js"></script>
 		
-		<script type="text/javascript" src="js/scripts.js"></script>
 		<script type="text/javascript" src="js/diffTexts.js"></script>
-	
+		
+		<script type="text/javascript" src="js/wikiHistory.js"></script>
+		
 	</head>
 	
 	<body>
-				
-		<div class="row">
 		
-			<div class="large-12 columns">
-			
-				<h1>Text History</h1>
+		<div id="wrapper"> 
 		
-				<div id="form_texts">
-				
-					<div class="inputs">
-				
-						<div class="panel input">
-						
-							<textarea name="texts[]"></textarea>
-					      
-						</div>
-						
-					</div>
-					
-					<div class="panel buttons right">
-					
-						<a href="#" class="button radius" id="button_add_more">Add more&hellip;</a>
-						<a href="#" class="button radius alert" id="button_visualise">Go</a>
-						
-					</div>
-			
-				</div>
-			
-			</div>	
-		
-		</div>
-		
-		<div class="row">
-		
-			<div class="large-12 columns" id="output">
-					
+			<div id="search_panel">
+				<input type="text" name="query"><a href="#">Go</a>
 			</div>
 			
+			<div id="output">
+			
+				<h1></h1>
+				<div class="page">
+				
+				</div>
+			
+			</div>
+			
+			<div id="pageNum"></div>
+			
 		</div>
-		
+				
 	</body>
 	
 </html>

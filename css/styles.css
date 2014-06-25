@@ -42,16 +42,22 @@ body {
   height: 80vh;
   top: 10vh;
   line-height: 1.4em;
-  overflow: hidden;
+}
+#output .page span {
+  -webkit-transition: all 1s ease-out;
+  font-size: 1em;
 }
 #output .page .added {
-  opacity: 1;
+  font-weight: bold;
   font-size: 2em;
+  opacity: .7;
 }
-#output .page .old {
-  opacity: 0.8;
+#output .page .removing {
+  font-size: 10em;
+  opacity: 0;
+  text-align: center;
 }
-#output .page::after {
+#wrapper::after {
   content: ".";
   text-indent: -10000px;
   display: block;

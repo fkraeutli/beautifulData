@@ -5,7 +5,7 @@ $j(init);
 var num_articles = 50;
 var req_url = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=revisions%7Cinfo&rvprop=content&rvlimit=" + num_articles + "&titles=";
 
-var maxChars = 10000,
+var maxChars = 2000,
 	transition_duration = 1000,
 	current = 0,
 	dataset,
@@ -29,6 +29,44 @@ function init() {
 		search();
 		
 	});
+	
+}
+
+function initInteraction() {
+	
+	 $j("#wrapper").bind("mousewheel", function(e){
+	 
+	 	var scroll = e.originalEvent.wheelDelta,
+	 		threshold = 25;
+	 	
+	 	if (scroll < -1 * threshold) {
+		 	
+		 	next();
+		 	console.log("next");
+		 	
+	 	} else if (scroll > threshold) {
+		 	
+		 	prev();
+		 	console.log("prev");
+		 	
+	 	}
+        
+    })
+    
+	window.addEventListener('keyup', function(event) { 
+	
+		if ( event.keyCode == 40 ) {
+			
+			next();
+			
+		} else if ( event.keyCode == 38 ) {
+			
+			prev();
+			
+		}
+	
+	}, false);
+    
 	
 }
 
@@ -63,7 +101,24 @@ function search() {
 
 function update( data ) {
 	
-	$j("#output h1").html( ucfirst( query ) );
+	function storePositions( prefix ) {
+		
+		if ( prefix === undefined ) {
+			
+			prefix = "";
+			
+		}
+		
+		$j(".page span").each( function(d) {
+			
+			var pos = $j(this).position();
+			
+			$j(this).attr("data-pos-" + prefix + "-top", pos.top)
+				.attr("data-pos-" + prefix + "-left", pos.left)
+			
+		} );
+		
+	}
 	
 	var output = d3.select("#output .page");
 	
@@ -73,29 +128,59 @@ function update( data ) {
 	var dataEnter = dataUpdate.enter();
 	var dataExit = dataUpdate.exit();
 	
-	dataEnter.append("span")
+	d3.select("#pageNum").html( current );
+	
+	storePositions("old");
+	
+	dataUpdate.classed("added", false)
+		.classed("old", true);
+		
+	var entered = dataEnter.append("span")
 		.html( function(d) {
 		
 			return d.text + " ";
 			
 		})
-		.classed("added", true);
+		
+	if ( current > 0 ) {
+		
+		entered.classed("added", true);
+	}
+		
 	
-	dataExit.transition()
-		.remove();
-		
-	dataUpdate.classed("added", false)
-		.classed("old", true);
-		
+	dataExit.classed("remove", true)
+		.style("display", "none");
+	
 	output.selectAll("span").sort( function (a, b) {
 		
 		return a.currentPos - b.currentPos;
 		
 	});
+	
+	$j(".page span.remove").each(function() {
+		
+		$j(this).css("position", "absolute")
+			.css( "top", $j(this).attr("data-pos-old-top") + "px" )
+			.css( "left", $j(this).attr("data-pos-old-left") + "px" );
+		
+		var el = $j(this);
+		
+		window.setTimeout( function() {
+
+		   el.addClass("removing");
+
+		}, 100);
+		
+	})
+	
+	dataExit.style("display", "")
+		.transition()
+		.duration(transition_duration)
+		.remove();
+
 }
 
 function process( data, query ) {
-	
 	
 	var pageIds = Object.keys(data.query.pages);
 	
@@ -116,6 +201,10 @@ function process( data, query ) {
 	}
 	
 	dataset = diffTexts( texts )
+	
+	$j("#output h1").html( ucfirst( query ) );
+
+	initInteraction();
 
 	update( dataset[current] );
 	
@@ -176,6 +265,8 @@ function mockupStuff() {
 	$j("#search_panel").hide();
 	
 	dataset = diffTexts ( DEBUG_texts );
+	
+	initInteraction();
 	
 	update( dataset[current] );
 	
