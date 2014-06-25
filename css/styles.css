@@ -8,6 +8,14 @@ body {
   font-size: 16px;
   font-family: "Times New Roman", Times, serif;
 }
+#ajax_loader {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  background-image: url(../images/ajax-loader.gif);
+}
 #search_panel {
   text-align: center;
   margin-top: 25%;
@@ -29,19 +37,41 @@ body {
   position: relative;
 }
 #output h1 {
-  margin-top: 5vw;
+  margin-top: 4vw;
   margin-left: 25vw;
+  margin-bottom: 0.5em;
   font-weight: 100;
+}
+#output .menu {
+  opacity: 0;
+  margin-top: 0;
+  margin-left: 25vw;
+  padding: 0;
+}
+#output .menu li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #dddddd;
+  font-size: 0.8em;
+  display: inline;
+  padding-right: 1em;
+}
+#output .menu li a {
+  color: #dddddd;
+  text-decoration: none;
+  border-bottom: 1px solid #dddddd;
+}
+#output .menu:hover {
+  opacity: 1;
 }
 #output .new {
   color: #ccc;
 }
 #output .page {
-  position: absolute;
-  left: 25vw;
+  margin-left: 25vw;
   width: 50vw;
   height: 80vh;
-  top: 10vh;
   line-height: 1.4em;
 }
 #output .page span {

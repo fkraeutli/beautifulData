@@ -66,7 +66,12 @@ function initInteraction() {
 		}
 	
 	}, false);
-    
+	
+	var menu = $j("<ul class=\"menu\">").insertAfter( $j("#output h1") )
+	
+	menu.append("<li><a id=\"button_play\" href=\"#\" onclick=\"play();\">Play</a></li>");
+	menu.append("<li><a id=\"button_play_backward\" href=\"#\" onclick=\"play_backward();\">Play Backward</a></li>");
+	menu.append("<li><a id=\"button_rewind\" href=\"#\" onclick=\"rewind();\">Rewind</a></li>");
 	
 }
 
@@ -81,6 +86,8 @@ function search() {
 		return false;
 		
 	}
+	
+	$j("#ajax_loader").fadeIn();
 		
 	$j.ajax({
 		
@@ -91,6 +98,8 @@ function search() {
 		},
 		success: function( data ) {
 			
+			$j("#ajax_loader").fadeOut();
+		
 			process( data, query );
 		}
 		
@@ -212,6 +221,42 @@ function process( data, query ) {
 
 	update( dataset[current] );
 	
+	
+}
+
+function play() {
+
+	var speed = transition_duration * 2;
+	next();
+	
+	if ( current < num_articles ) {
+	
+		setTimeout(play, speed);
+		
+	}
+	
+	
+}
+
+function play_backward() {
+
+	var speed = transition_duration * 2;
+	
+	if ( current > 0 ) {
+	
+		prev();
+		setTimeout(play_backward, speed);
+		
+	}
+	
+	
+}
+
+function rewind() {
+	
+	current = 0;
+	
+	update( dataset[ current ] );
 	
 }
 
