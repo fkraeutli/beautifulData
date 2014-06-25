@@ -6,6 +6,7 @@ body,
 }
 body {
   font-size: 16px;
+  font-family: "Times New Roman", Times, serif;
 }
 #search_panel {
   text-align: center;
@@ -44,13 +45,14 @@ body {
   line-height: 1.4em;
 }
 #output .page span {
-  -webkit-transition: all 1s ease-out;
+  -webkit-transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
   font-size: 1em;
 }
 #output .page .added {
-  font-weight: bold;
-  font-size: 2em;
-  opacity: .7;
+  font-size: 1.5em;
 }
 #output .page .removing {
   font-size: 10em;
@@ -78,6 +80,11 @@ body {
   background: linear-gradient(rgba(255, 255, 255, 0), #ffffff);
   /* Standard syntax */
 
+}
+#pageNum {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
 }
 .input textarea {
   width: 100%;

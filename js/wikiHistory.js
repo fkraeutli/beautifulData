@@ -5,8 +5,8 @@ $j(init);
 var num_articles = 50;
 var req_url = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=revisions%7Cinfo&rvprop=content&rvlimit=" + num_articles + "&titles=";
 
-var maxChars = 2000,
-	transition_duration = 1000,
+var maxChars = 3000,
+	transition_duration = 500,
 	current = 0,
 	dataset,
 	query;
@@ -144,7 +144,11 @@ function update( data ) {
 		
 	if ( current > 0 ) {
 		
-		entered.classed("added", true);
+		window.setTimeout( function() {
+
+			entered.classed("added", true);
+
+		}, 100);
 	}
 		
 	
