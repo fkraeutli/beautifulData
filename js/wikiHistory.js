@@ -67,12 +67,14 @@ function initInteraction() {
 	
 	}, false);
 	
+	
+	/*
 	var menu = $j("<ul class=\"menu\">").insertAfter( $j("#output h1") )
 	
 	menu.append("<li><a id=\"button_play\" href=\"#\" onclick=\"play();\">Play</a></li>");
 	menu.append("<li><a id=\"button_play_backward\" href=\"#\" onclick=\"play_backward();\">Play Backward</a></li>");
 	menu.append("<li><a id=\"button_rewind\" href=\"#\" onclick=\"rewind();\">Rewind</a></li>");
-	
+	*/
 }
 
 function search() {
@@ -207,11 +209,16 @@ function process( data, query ) {
 		
 		
 		text = txtwiki.parseWikitext( text );
+		text = stripBrackets( text );
 		text = text.substring( 0, maxChars);
+		
+		text = text.replace(/==/g, "<p>");
 
 		texts.push( text )
 		
 	}
+	
+	DEBUG_texts = texts;
 	
 	dataset = diffTexts( texts )
 	
@@ -298,9 +305,79 @@ function ucfirst(str) {
   return f + str.substr(1);
 }
 
+
+function stripBrackets( text ) {
+			
+	function push() {
+	
+		var nextLevel = currentLevel + 1;
+	
+		stack[nextLevel] = stack[currentLevel].substr( stack[currentLevel].indexOf("{{") + 2 );
+		stack[currentLevel] = stack[currentLevel].substr(0, stack[currentLevel].indexOf("{{"));
+		
+		currentLevel = nextLevel;
+		
+	}
+	
+	function pop() {
+		
+		var nextLevel = currentLevel - 1;
+		
+		stack[nextLevel] = stack[nextLevel] + stack[currentLevel].substr( stack[currentLevel].indexOf( "}}" ) + 2 );
+		
+		currentLevel = nextLevel;
+	}
+	
+	function run() {	
+	
+		if ( stack[ currentLevel ].indexOf("}}") > -1  && currentLevel < maxExec) {
+
+			if ( stack[ currentLevel ].indexOf("{{") > -1 ) {
+			
+				if ( stack[currentLevel].indexOf("{{") < stack[currentLevel].indexOf("}}") ) {
+					
+					push();
+					
+				} else {
+					
+					pop();
+					
+				}
+			
+			} else if ( stack[ currentLevel ].indexOf("}}") > -1 ) {
+				
+				pop();
+				
+			}
+			
+			run();
+			
+		} else {
+			
+			ret = stack[0];
+			
+		}
+	
+	}
+	
+	var stack = [ text ];	
+
+	var currentLevel = 0;
+	
+	var maxExec = 100;
+	
+	var ret = "";
+	
+	run();
+	
+	return ret;		
+	
+}
+
+
 /* DEBUG */
 
-DEBUG_texts = [
+DEBUG_example_texts = [
 	"This is an article on history.",
 	"This is a text on history.",
 	"This is a very brief text on history.",
@@ -313,7 +390,7 @@ function mockupStuff() {
 	
 	$j("#search_panel").hide();
 	
-	dataset = diffTexts ( DEBUG_texts );
+	dataset = diffTexts ( DEBUG_example_texts );
 	
 	initInteraction();
 	
