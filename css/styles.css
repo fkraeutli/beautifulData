@@ -117,6 +117,8 @@ body {
   position: absolute;
   bottom: 1em;
   right: 1em;
+  color: #999;
+  font-size: 0.8em;
 }
 .input textarea {
   width: 100%;

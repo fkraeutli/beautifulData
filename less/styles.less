@@ -171,6 +171,9 @@ body {
 	position: absolute;
 	bottom: 1em;
 	right: 1em;
+	color: #999;
+	font-size: 0.8em;
+	
 	
 }
 
@@ -192,12 +195,12 @@ body {
 }
 
 
-.transition() {
+.transition( @duration: 0.5s ) {
 	
-	-webkit-transition: all 0.5s ease-out;
-	-moz-transition: all 0.5s ease-out;
-	-o-transition: all 0.5s ease-out;
+	-webkit-transition: all @duration ease-out;
+	-moz-transition: all @duration ease-out;
+	-o-transition: all @duration ease-out;
 	
-	transition: all 0.5s ease-out;
+	transition: all @duration ease-out;
 	
 }

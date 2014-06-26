@@ -3,12 +3,14 @@ $j = jQuery.noConflict();
 $j(init);
 
 var num_articles = 50;
-var req_url = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=revisions%7Cinfo&rvprop=content&rvlimit=" + num_articles + "&titles=";
+var req_url = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=revisions%7Cinfo&rvprop=content|timestamp&rvlimit=" + num_articles + "&titles=";
 
 var maxChars = 3000,
 	transition_duration = 500,
 	current = 0,
 	dataset,
+	timestamps = [],
+	timestampScale,
 	query;
 
 function init() {
@@ -42,12 +44,10 @@ function initInteraction() {
 	 	if (scroll < -1 * threshold) {
 		 	
 		 	next();
-		 	console.log("next");
 		 	
 	 	} else if (scroll > threshold) {
 		 	
 		 	prev();
-		 	console.log("prev");
 		 	
 	 	}
         
@@ -131,6 +131,19 @@ function update( data ) {
 		
 	}
 	
+	function updatePageIndicator() {
+		
+		d3.select("#pageNum").html( 
+			( timestamps[ current ].getDate() < 10 ? "0" + timestamps[ current ].getDate() : timestamps[ current ].getDate() ) + "." + 
+			( timestamps[ current ].getMonth() < 10 ? "0" + timestamps[ current ].getMonth() : timestamps[ current ].getMonth() ) + "." +
+			timestamps[ current ].getFullYear() + " " +
+			( timestamps[ current ].getHours() < 10 ? "0" + timestamps[ current ].getHours() : timestamps[ current ].getHours() ) + ":" + 
+			( timestamps[ current ].getMinutes() < 10 ? "0" + timestamps[ current ].getMinutes() : timestamps[ current ].getMinutes() ) )
+		.style( "top", timestampScale( timestamps[ current ] ) + "%" );
+			
+		
+	}
+	
 	var output = d3.select("#output .page");
 	
 	var dataUpdate = output.selectAll("span")	
@@ -139,7 +152,7 @@ function update( data ) {
 	var dataEnter = dataUpdate.enter();
 	var dataExit = dataUpdate.exit();
 	
-	d3.select("#pageNum").html( current );
+	updatePageIndicator();
 	
 	storePositions("old");
 	
@@ -196,6 +209,8 @@ function update( data ) {
 }
 
 function process( data, query ) {
+
+	DEBUG_data = data;
 	
 	var pageIds = Object.keys(data.query.pages);
 	
@@ -207,7 +222,6 @@ function process( data, query ) {
 		
 		var text = revisions[ i ][ "*" ];
 		
-		
 		text = txtwiki.parseWikitext( text );
 		text = stripBrackets( text );
 		text = text.substring( 0, maxChars);
@@ -216,7 +230,13 @@ function process( data, query ) {
 
 		texts.push( text )
 		
+		timestamps.push( new Date(revisions[ i ].timestamp) );
+		
 	}
+	
+	timestampScale = d3.scale.linear()
+		.domain( [d3.max(timestamps), d3.min(timestamps) ] )
+		.range( [0, 99] )
 	
 	DEBUG_texts = texts;
 	
