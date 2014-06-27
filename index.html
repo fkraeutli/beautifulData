@@ -7,41 +7,60 @@
 		
 		<link rel="stylesheet" href="css/styles.css">
 		
-		<script type="text/javascript" src="libs/jquery-1.11.1.js"></script>
-		<script type="text/javascript" src="libs/d3.min.js"></script>
-		<script type="text/javascript" src="libs/jsdiff.js"></script>
-		<script type="text/javascript" src="libs/txtwiki.js"></script>
-		
-		<script type="text/javascript" src="js/diffTexts.js"></script>
-		
-		<script type="text/javascript" src="js/wikiHistory.js"></script>
-		
 	</head>
 	
 	<body>
 		
 		<div id="wrapper"> 
 		
-			<div id="search_panel">
-				<input type="text" name="query"><a href="#">Go</a>
+			<div id="intro">
+			
+				<iframe src="//player.vimeo.com/video/99281023?title=0&amp;byline=0&amp;portrait=0" width="800" height="450" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> 
+				
 			</div>
 			
-			<div id="output">
+			<div id="description">
 			
-				<h1></h1>
-				<div class="page">
+			
+				<div class="content">
 				
+					<h2>What is BackStory?</h2>
+					
+					<p class="introduction">
+					
+						BackStory is an online visualisation tool for exploring the history of wikipedia articles. It was created during the Beautiful Data workshop organised by <a href="http://metalab.harvard.edu/">metaLab</a> at Harvard University, June 16 - 27 2014.
+						
+					</p>
+					
+					<h2><a href="backstory.html">Try BackStory</a></h2>
+					
+					<p>BackStory lets you access articles on Wikipedia and navigate through past revisions by scrolling or by using the up and down arrow keys. It is a rough demonstrator and will most probably break. Give it some time to load, but if you don't get a result back just reload the page and try again. Start with easy terms like names of countries, objects etc.</p>
+					
+					<p>If you want to improve it or see how it works, the <a href="https://github.com/fkraeutli/beautifulData">code is available on GitHub</a></p>
+					
+					<h2>Credits</h2>
+					
+					<p>
+					
+						BackStory makes use of the following APIs and libraries:
+					
+					</p>
+					
+					<ul>
+					
+						<li>The <a href="http://www.mediawiki.org/wiki/API:Main_page">Wikipedia API</a></li>
+						<li>Joao Sa's <a href="https://github.com/joaomsa/txtwiki.js/commits/master">txtWiki</a> for parsing Wikipedia formatted text</li>
+						<li>John Resig's <a href="http://ejohn.org/projects/javascript-diff-algorithm/">implementation</a> of the <a href="http://dl.acm.org/citation.cfm?id=359460.359467&dl=GUIDE&dl=ACM&idx=359460&part=periodical&WantType=periodical&title=Communications%2520of%2520the%2520ACM">Heckel (1978)</a> file difference algorithm</li>
+						<li>The <a href="http://d3js.org/">d3.js</a> JavaScript library</li>
+						<li>The <a href="http://jquery.com/">jQuery</a> JavaScript library</li>
+					
+					</ul>
+					
+					<p>Created by <a href="http://www.kraeutli.com">Florian Kr&auml;utli</a> who also runs a <a href="http://research.kraeutli.com">blog</a> and occasionally <a href="http://www.twitter.com/fkraeutli">tweets</a>.</p>
+					
 				</div>
-			
-			</div>
-			
-			
-		</div>
-		
-		<div id="ajax_loader" style="display:none;">&nbsp;</div>
-		
-		<div id="pageNum"></div>
 				
+			</div>
 	</body>
 	
 </html>

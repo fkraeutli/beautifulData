@@ -1,10 +1,12 @@
 html,
-body,
-#wrapper {
+body {
   height: 100%;
-  overflow: hidden;
   margin: 0;
   padding: 0;
+}
+body#backStory,
+body#backStory #wrapper {
+  overflow: hidden;
 }
 body {
   font-size: 16px;
@@ -17,6 +19,41 @@ body {
   top: 30%;
   left: 50%;
   background-image: url(../images/ajax-loader.gif);
+}
+#intro {
+  width: 800px;
+  margin: auto;
+  max-width: 80%;
+  font-size: 1.2em;
+}
+#intro iframe {
+  margin: 5em 0;
+  max-width: 100%;
+}
+#description {
+  background: #dddddd;
+}
+#description .content {
+  width: 800px;
+  max-width: 80%;
+  margin: auto;
+  padding: 3em 0;
+}
+#description p {
+  line-height: 1.4em;
+}
+#description h1,
+#description h2 {
+  font-family: sans-serif;
+  font-weight: 100;
+}
+#description a {
+  color: black;
+  text-decoration: none;
+  border-bottom: 1px solid teal;
+}
+#description ul li {
+  margin: 1em 0;
 }
 #search_panel {
   text-align: center;
@@ -91,7 +128,7 @@ body {
   opacity: 0;
   text-align: center;
 }
-#wrapper::after {
+#backStory #wrapper::after {
   content: ".";
   text-indent: -10000px;
   display: block;

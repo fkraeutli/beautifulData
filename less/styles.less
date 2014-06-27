@@ -1,12 +1,17 @@
 @grey: #ddd;
 
 
-html, body, #wrapper {
+html, body {
 	
 	height: 100%;
-	overflow: hidden;
 	margin: 0;
 	padding: 0;
+}
+
+body#backStory, body#backStory #wrapper {
+	
+	overflow: hidden;
+	
 }
 
 body {
@@ -26,6 +31,72 @@ body {
 	left: 50%;
 	
 	background-image: url(../images/ajax-loader.gif);
+	
+}
+
+#intro {
+	
+	width: 800px;
+	margin: auto;
+	max-width: 80%;
+	
+	
+	font-size: 1.2em;
+	
+	iframe {
+		
+		margin: 5em 0;
+		max-width: 100%;
+		
+	}
+		
+}
+
+#description {
+
+	background: @grey;
+
+	.content {
+	
+		width: 800px;
+		max-width: 80%;
+		margin: auto;
+		padding: 3em 0;
+		
+	}
+	
+
+	p {
+		
+		line-height: 1.4em;
+		
+	}
+	
+	h1, h2 {
+		
+		font-family: sans-serif;
+		font-weight: 100;
+		
+	}
+	
+	a {
+	
+		color: black;
+		text-decoration: none;
+		border-bottom: 1px solid teal;
+		
+	}
+	
+	ul {
+		
+		li {
+		
+			margin: 1em 0;	
+			
+		}
+		
+	}
+
 	
 }
 
@@ -148,7 +219,7 @@ body {
 	
 }
 
-#wrapper::after {
+#backStory #wrapper::after {
 	
 	content: ".";
 	text-indent: -10000px;
